@@ -12,13 +12,13 @@ namespace IntegrationTesting.Components.Introduction
             _ctx = ctx;
         }
 
-
         [HttpGet]
         public IActionResult List()
         {
             return Ok(_ctx.Animals.ToList());
         }
 
+        [HttpGet]
         public IActionResult Get(int id)
         {
             return Ok(_ctx.Animals.FirstOrDefault(x => x.Id == id));

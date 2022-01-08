@@ -22,7 +22,7 @@ namespace IntegrationTesting.Components.Introduction
         public async Task Register(Animal animal)
         {
             animal.Created = _clock.Now();
-            _ctx.Add(animal);
+            await _ctx.Animals.AddAsync(animal);
             await _ctx.SaveChangesAsync();
 
             _eventSink.SendEmailsToCustomerThatWantThisTypeOfAnimalsAndAttachPicturesAndAllThatJazz();
