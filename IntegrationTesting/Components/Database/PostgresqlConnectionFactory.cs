@@ -7,13 +7,12 @@ namespace IntegrationTesting.Components.Database
     public class PostgresqlConnectionFactory : IAsyncDisposable
     {
         private readonly string _connectionString;
+        private NpgsqlConnection _connection;
 
         public PostgresqlConnectionFactory(string connectionString)
         {
             _connectionString = connectionString;
         }
-
-        private NpgsqlConnection _connection;
 
         public async Task<NpgsqlConnection> Create()
         {
