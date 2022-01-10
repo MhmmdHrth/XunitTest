@@ -1,9 +1,8 @@
-﻿using IntegrationTesting.Components.Database;
-using Npgsql;
+﻿using Npgsql;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTesting.Components
+namespace IntegrationTesting.Components.Database
 {
     public class AnimalFixture : IAsyncLifetime
     {
