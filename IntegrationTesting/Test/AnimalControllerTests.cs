@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 
-namespace IntegrationTesting
+namespace IntegrationTesting.Test
 {
     public class AnimalControllerTests
     {
@@ -27,12 +27,11 @@ namespace IntegrationTesting
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var animals = Assert.IsType<List<Animal>>(okResult.Value);
-            var animal = Assert.Single(animals);
+            var animal = Assert.Single(animals, x => x.Id.Equals(1));
             Assert.NotNull(animal);
             Assert.Equal(1, animal.Id);
             Assert.Equal("Foo", animal.Name);
             Assert.Equal("Bar", animal.Type);
-
         }
 
         [Fact]
@@ -46,7 +45,6 @@ namespace IntegrationTesting
             Assert.Equal(1, animal.Id);
             Assert.Equal("Foo", animal.Name);
             Assert.Equal("Bar", animal.Type);
-
         }
     }
 }
