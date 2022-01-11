@@ -1,4 +1,5 @@
-﻿using IntegrationTesting.Components.Database;
+﻿using IntegrationTesting.Collections;
+using IntegrationTesting.Components.Database;
 using System.Threading.Tasks;
 using Xunit;
 

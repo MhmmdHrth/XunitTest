@@ -1,7 +1,7 @@
 ﻿using IntegrationTesting.Components.Database;
 using Xunit;
 
-namespace IntegrationTesting
+namespace IntegrationTesting.Collections
 {
     [CollectionDefinition(nameof(AnimalCollection))]
     public class AnimalCollection : ICollectionFixture<AnimalFixture>

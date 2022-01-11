@@ -1,30 +1,24 @@
-﻿using IntegrationTesting.Components.Introduction;
+﻿using IntegrationTesting.Collections;
+using IntegrationTesting.Components.Introduction;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Reflection;
 using Xunit;
 
 namespace IntegrationTesting.Test
 {
+    [Collection(nameof(InMemoryDatabaseCollection))]
     public class AnimalControllerTests
     {
-        private readonly AppDbContext _context;
-        public AnimalControllerTests()
+        private readonly InMemoryDatabaseFixture _databaseFixture;
+        public AnimalControllerTests(InMemoryDatabaseFixture databaseFixture)
         {
-            //constructor will execute many time base on number of test!
-            DbContextOptionsBuilder<AppDbContext> optionsBuilder = new();
-            optionsBuilder.UseInMemoryDatabase(MethodBase.GetCurrentMethod().Name);
-
-            _context = new(optionsBuilder.Options);
-            _context.Animals.Add(new Animal { Name = "Foo", Type = "Bar" });
-            _context.SaveChanges();
+            _databaseFixture = databaseFixture;
         }
 
         [Fact]
         public void AnimalController_ListsAnimalsFromDatabase()
         {
-            IActionResult result = new AnimalController(_context).List();
+            IActionResult result = new AnimalController(_databaseFixture._context).List();
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var animals = Assert.IsType<List<Animal>>(okResult.Value);
@@ -38,7 +32,7 @@ namespace IntegrationTesting.Test
         [Fact]
         public void AnimalController_GetAnimalFromDatabase()
         {
-            IActionResult result = new AnimalController(_context).Get(1);
+            IActionResult result = new AnimalController(_databaseFixture._context).Get(1);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var animal = Assert.IsType<Animal>(okResult.Value);
