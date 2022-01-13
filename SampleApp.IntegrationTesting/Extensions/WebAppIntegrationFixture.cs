@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -11,21 +13,44 @@ namespace SampleApp.IntegrationTesting.Extensions
 
         public HttpClient _client;
 
+        public Stream TestFile { get; private set; }
+
+        private string _clenupPath { get; set; }
+
         public async Task DisposeAsync()
         {
             _client.Dispose();
             await _factory.DisposeAsync();
+
+            var directoryInfo = new DirectoryInfo(_clenupPath);
+            foreach(var file in directoryInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+            Directory.Delete(_clenupPath);
         }
 
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             _factory = _factory.WithWebHostBuilder(x =>
             {
-                x.addCustomeService();
+                (IWebHostBuilder builder, string cleanupPath) = x.addCustomeService();
+                _clenupPath = cleanupPath;
             });
 
             _client = _factory.CreateClient();
-            return Task.CompletedTask;
+
+            TestFile = await GetTestImage();
+        }
+
+        public async Task<Stream> GetTestImage()
+        {
+            MemoryStream st = new();
+            var fileStream = File.OpenRead("base.png");
+            await fileStream.CopyToAsync(st);
+
+            return st;
         }
     }
 }
